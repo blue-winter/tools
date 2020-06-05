@@ -1,0 +1,21 @@
+{
+    "name": "admintools/tools",
+    "description": "admin tools",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lk",
+            "email": "18337180580@163.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "sergeytsalkov/meekrodb": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "admintools\\tools\\": "src/"
+        },
+        "files": ["src/lib/helper.php"]
+    }
+}
