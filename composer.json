@@ -17,5 +17,6 @@
             "admintools\\tools\\": "src/"
         },
         "files": ["src/lib/helper.php"]
-    }
+    },
+    "version": "1.0.0"
 }
