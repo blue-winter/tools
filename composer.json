@@ -1,6 +1,7 @@
 {
     "name": "admintools/tools",
     "description": "admin tools",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
@@ -18,5 +19,5 @@
         },
         "files": ["src/lib/helper.php"]
     },
-    "version": "1.0.0"
+    "version": "1.0.1"
 }
