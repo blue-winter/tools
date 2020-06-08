@@ -528,6 +528,7 @@ if(!function_exists('dir_mkdir'))
     }
 }
 
+
 if(!function_exists('createStatic'))
 {
     function createStatic()
