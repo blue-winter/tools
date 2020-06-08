@@ -1,13 +1,13 @@
 <?php
 require_once './vendor/autoload.php';
-showToolsMenu();
+initTools();
 $dir ='C:/WWW/tools//tools/media/aaaa/bbbb/cccc/';
 $dir ='C:/WWW/tools//tools/media/';
 /*$top_menu=getDirParent($dir);
 dump($top_menu);*/
 
-$res= getDirParent($dir);
-dump($res);
+$res= getPublicPath(true);
+//dump($res);
 
 
 

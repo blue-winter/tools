@@ -57,6 +57,7 @@ class Html extends Common
     public function menusShow()
     {
         $is_show_menu=$this->show_menu;
+        createStatic();
         header("Content-Type: text/html;charset=utf-8");
         $get_url = Param('get.get_url');
         if($get_url){

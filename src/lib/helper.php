@@ -31,13 +31,13 @@ if (!function_exists('dump'))
     }
 }
 
-if(!function_exists('showToolsMenu'))
+if(!function_exists('initTools'))
 {
     /**
-     * show menu
+     * init Tools
      * @return mixed
      */
-    function showToolsMenu(){
+    function initTools(){
         return \admintools\tools\facade\Html::menusShow();
     }
 }
@@ -46,34 +46,6 @@ if(!function_exists('initToolsDb'))
 {
     function initToolsDb(){
         return \admintools\tools\facade\ToolDb::init();
-    }
-}
-
-if(!function_exists('getBasePath'))
-{
-    function getBasePath()
-    {
-        return $_SERVER['DOCUMENT_ROOT'].'/' ;
-    }
-}
-
-if(!function_exists('getMediaPath'))
-{
-    /**
-     * @return string
-     */
-    function getMediaPath()
-    {
-        $dir =getBasePath().'/tools/media/';
-        if(!is_dir($dir)){
-            try{
-                mkdir ($dir,0777,true);
-            }catch (\Exception $e){
-                return "File creation failed, no permission! \n Please manually create in the root directory of the website: tools/config.php";
-                die;
-            }
-        }
-        return $dir;
     }
 }
 
@@ -200,10 +172,6 @@ if(!function_exists('getDirParent'))
         return  array_reverse($result);
     }
 }
-
-
-
-
 
 if(!function_exists('Param'))
 {
@@ -361,6 +329,14 @@ if(!function_exists('get_client_ip'))
     }
 }
 
+if(!function_exists('getBasePath'))
+{
+    function getBasePath()
+    {
+        return $_SERVER['DOCUMENT_ROOT'].'/' ;
+    }
+}
+
 if(!function_exists('getPublicPath'))
 {
     /**
@@ -373,15 +349,29 @@ if(!function_exists('getPublicPath'))
         if($absolute){
             $path =dirname(dirname(__FILE__)).'/public/';
         }else{
-            $path_1='/vendor/admintools/tools/src/public/';
-            $path_2='/src/public/';//test
-            if(is_dir(getBasePath().$path_1)){
-                $path = $path_1;
-            }else{
-                $path = $path_2;
-            }
+            $path='./tools/static/';
         }
         return $path;
+    }
+}
+
+if(!function_exists('getMediaPath'))
+{
+    /**
+     * @return string
+     */
+    function getMediaPath()
+    {
+        $dir =getBasePath().'/tools/media/';
+        if(!is_dir($dir)){
+            try{
+                mkdir ($dir,0777,true);
+            }catch (\Exception $e){
+                return "File creation failed, no permission! \n Please manually create in the root directory of the website: tools/config.php";
+                die;
+            }
+        }
+        return $dir;
     }
 }
 
@@ -462,7 +452,6 @@ if(!function_exists('uploadFile'))
     }
 }
 
-
 if(!function_exists('buildAjaxUrl'))
 {
     function buildAjaxUrl($action)
@@ -479,5 +468,81 @@ if(!function_exists('buildUrl'))
     }
 }
 
+if(!function_exists('dir_copy'))
+{
+    /**
+     * 文件夹文件拷贝
+     *
+     * @param string $src 来源文件夹
+     * @param string $dst 目的地文件夹
+     * @return bool
+     */
+    function dir_copy($src = '', $dst = '')
+    {
+        if (empty($src) || empty($dst))
+        {
+            return false;
+        }
+        $dir = opendir($src);
+        dir_mkdir($dst);
+        while (false !== ($file = readdir($dir)))
+        {
+            if (($file != '.') && ($file != '..'))
+            {
+                if (is_dir($src . '/' . $file))
+                {
+                    dir_copy($src . '/' . $file, $dst . '/' . $file);
+                }
+                else
+                {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
 
+        return true;
+    }
+}
+
+if(!function_exists('dir_mkdir'))
+{
+    /**
+     * 创建文件夹
+     *
+     * @param string $path 文件夹路径
+     * @param int $mode 访问权限
+     * @param bool $recursive 是否递归创建
+     * @return bool
+     */
+    function dir_mkdir($path = '', $mode = 0777, $recursive = true)
+    {
+        clearstatcache();
+        if (!is_dir($path))
+        {
+            mkdir($path, $mode, $recursive);
+            return chmod($path, $mode);
+        }
+
+        return true;
+    }
+}
+
+if(!function_exists('createStatic'))
+{
+    function createStatic()
+    {
+        try{
+            $path =dirname(dirname(__FILE__)).'/public/';
+            if(!is_dir('./tools/static/')){
+                dir_copy($path,'./tools/static/');
+            }
+            deldir('./tools/static/html/');
+        }catch (\Exception $e){
+            echo "File creation failed, no permission! \n Please manually create in the root directory of the website: tools/config.php";
+            die;
+        }
+
+    }
+}
 

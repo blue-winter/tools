@@ -154,7 +154,7 @@
         margin-top: 4px;
     }
     body .x-folder {
-        background-image: url(http://cloud.uiucode.com/static/images/file_icon/icon_others/folder_mac.png);
+        background-image: url(<?php echo $path; ?>/img/folder_mac.png);
         background-image: none \9;
     }
     .x-item-file {
