@@ -5,13 +5,10 @@ use admintools\tools\Common;
 
 class Html extends Common
 {
-    public $show_menu=true;
 
-
-    public function __construct($ajax = false,$show_menu=true)
+    public function __construct($ajax = false)
     {
         parent::__construct($ajax);
-        $this->show_menu=$show_menu;
     }
 
     /**
@@ -19,7 +16,6 @@ class Html extends Common
      */
     public function index()
     {
-        $is_show_menu=$this->show_menu;
         require_once getPublicPath().'html/index.php';
     }
 
@@ -28,7 +24,6 @@ class Html extends Common
      */
     public function images()
     {
-        $is_show_menu=$this->show_menu;
         $file = Param('get.base_path');
         $dir = $file?base64_decode($file):getMediaPath();
         $return =Param('get.return');
@@ -56,7 +51,6 @@ class Html extends Common
      */
     public function menusShow()
     {
-        $is_show_menu=$this->show_menu;
         createStatic();
         header("Content-Type: text/html;charset=utf-8");
         $get_url = Param('get.get_url');
@@ -64,7 +58,7 @@ class Html extends Common
             //is install
             if($this->installStatus()){
                 $url = $get_url;
-                call_user_func([new Html(false,false),$url]);
+                call_user_func([new Html(false),$url]);
             }else{
                 require_once getPublicPath().'html/install.php';
             }

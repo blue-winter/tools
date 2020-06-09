@@ -349,7 +349,7 @@ if(!function_exists('getPublicPath'))
         if($absolute){
             $path =dirname(dirname(__FILE__)).'/public/';
         }else{
-            $path='./tools/static/';
+            $path='/tools/static/';
         }
         return $path;
     }
@@ -528,7 +528,6 @@ if(!function_exists('dir_mkdir'))
     }
 }
 
-
 if(!function_exists('createStatic'))
 {
     function createStatic()
@@ -547,3 +546,76 @@ if(!function_exists('createStatic'))
     }
 }
 
+if(!function_exists('CookieTools'))
+{
+    function CookieTools($name='', $value='', $option=null) {
+        // 默认设置
+        $config = array(
+            'prefix'    =>  'tools', // cookie 名称前缀
+            'expire'    =>  '3600', // cookie 保存时间
+            'path'      =>  '/', // cookie 保存路径
+            'domain'    =>  '', // cookie 有效域名
+            'secure'    =>  false, //  cookie 启用安全传输
+            'httponly'  =>  '', // httponly设置
+        );
+        // 参数设置(会覆盖黙认设置)
+        if (!is_null($option)) {
+            if (is_numeric($option))
+                $option = array('expire' => $option);
+            elseif (is_string($option))
+                parse_str($option, $option);
+            $config     = array_merge($config, array_change_key_case($option));
+        }
+        if(!empty($config['httponly'])){
+            ini_set("session.cookie_httponly", 1);
+        }
+        // 清除指定前缀的所有cookie
+        if (is_null($name)) {
+            if (empty($_COOKIE))
+                return null;
+            // 要删除的cookie前缀，不指定则删除config设置的指定前缀
+            $prefix = empty($value) ? $config['prefix'] : $value;
+            if (!empty($prefix)) {// 如果前缀为空字符串将不作处理直接返回
+                foreach ($_COOKIE as $key => $val) {
+                    if (0 === stripos($key, $prefix)) {
+                        setcookie($key, '', time() - 3600, $config['path'], $config['domain'],$config['secure'],$config['httponly']);
+                        unset($_COOKIE[$key]);
+                    }
+                }
+            }
+            return null;
+        }elseif('' === $name){
+            // 获取全部的cookie
+            return $_COOKIE;
+        }
+        $name = $config['prefix'] . str_replace('.', '_', $name);
+        if ('' === $value) {
+            if(isset($_COOKIE[$name])){
+                $value =    $_COOKIE[$name];
+                if(0===strpos($value,'think:')){
+                    $value  =   substr($value,6);
+                    return array_map('urldecode',json_decode(MAGIC_QUOTES_GPC?stripslashes($value):$value,true));
+                }else{
+                    return $value;
+                }
+            }else{
+                return null;
+            }
+        } else {
+            if (is_null($value)) {
+                setcookie($name, '', time() - 3600, $config['path'], $config['domain'],$config['secure'],$config['httponly']);
+                unset($_COOKIE[$name]); // 删除指定cookie
+            } else {
+                // 设置cookie
+                if(is_array($value)){
+                    $value  = 'think:'.json_encode(array_map('urlencode',$value));
+                }
+                $expire = !empty($config['expire']) ? time() + intval($config['expire']) : 0;
+                setcookie($name, $value, $expire, $config['path'], $config['domain'],$config['secure'],$config['httponly']);
+                $_COOKIE[$name] = $value;
+            }
+        }
+        return null;
+    }
+
+}
