@@ -10,11 +10,11 @@ class AjaxUrl extends Common
      */
     public function install()
     {
-        $config['host']=($_GET['host']);
-        $config['dbname']=($_GET['dbname']);
-        $config['user']=($_GET['user']);
-        $config['password']=($_GET['password']);
-        $config['port']=($_GET['port']);
+        $config['host']=Param('get.host');
+        $config['dbname']=Param('get.dbname');
+        $config['user']=Param('get.user');
+        $config['password']=Param('get.password');
+        $config['port']=Param('get.port');
         $config['charset']='utf8mb4';
         $tools=(new ToolDb($config));
         try{

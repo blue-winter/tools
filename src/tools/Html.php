@@ -42,7 +42,6 @@ class Html extends Common
         $data['now_path']= base64_encode($dir);
         $data['level']=[];
 
-        //dump($data);die;
         require_once getPublicPath().'html/images.php';
     }
 

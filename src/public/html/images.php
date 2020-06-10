@@ -359,39 +359,40 @@
 
             <!--文件-->
             <?php if(isset($data['files'])&&$data['files']): foreach ($data['files'] as $file): ?>
-                <!--图片-->
-                <?php if ($file['type']=='img'): ?>
-                    <!-- 图片 -->
-                    <div data-path="<?php echo base64_encode($file['path']); ?>" class="file  file-box menu-file  select_btn" title="名称:<?php echo $file['name']; ?>修改时间 :<?php echo $file['last_time'];?> 大小: <?php echo $file['size'];?>" >
-                        <div class="item-select">
-                            <div class="item-check"></div>
-                        </div>
+                <?php if($file['type']!='path'): ?>
+                    <!--图片-->
+                    <?php if ($file['type']=='img'): ?>
+                        <!-- 图片 -->
+                        <div data-path="<?php echo base64_encode($file['path']); ?>" class="file  file-box menu-file  select_btn" title="名称:<?php echo $file['name']; ?>修改时间 :<?php echo $file['last_time'];?> 大小: <?php echo $file['size'];?>" >
+                            <div class="item-select">
+                                <div class="item-check"></div>
+                            </div>
 
-                        <div class="ico img_tips"  src="/tools/media/<?php echo $file['base_path']; ?>">
-                            <img width="80px" style="cursor: pointer" src="/tools/media/<?php echo $file['base_path']; ?>" >
+                            <div class="ico img_tips"  src="/tools/media/<?php echo $file['base_path']; ?>">
+                                <img width="80px" style="cursor: pointer" src="/tools/media/<?php echo $file['base_path']; ?>" >
+                            </div>
+                            <div class="filename">
+                                <span class="title db-click-rename" title="<?php echo $file['name']; ?>"><?php echo $file['name']; ?></span>
+                            </div>
                         </div>
-                        <div class="filename">
-                            <span class="title db-click-rename" title="<?php echo $file['name']; ?>"><?php echo $file['name']; ?></span>
+                        <!-- 图片 -->
+                    <!--其他文件-->
+                    <?php else: ?>
+                        <!-- 文件 -->
+                        <div  data-path="<?php echo base64_encode($file['path']); ?>" class="file  file-box menu-file select_btn" title="名称:<?php echo $file['name']; ?>修改时间 :<?php echo $file['last_time'];?> 大小: <?php echo $file['size'];?>" >
+                            <div class="item-select">
+                                <div class="item-check"></div>
+                            </div>
+                            <div class="ico" >
+                                <i style="font-size: 56px!important;cursor: pointer" class="layui-icon layui-icon-file"></i>
+                            </div>
+                            <div class="filename">
+                                <span class="title db-click-rename" title="<?php echo $file['name']; ?>"><?php echo $file['name']; ?></span>
+                            </div>
                         </div>
-                    </div>
-                    <!-- 图片 -->
+                        <!-- 文件 -->
 
-                <!--其他文件-->
-                <?php else: ?>
-                    <!-- 文件 -->
-                    <div  data-path="<?php echo base64_encode($file['path']); ?>" class="file  file-box menu-file select_btn" title="名称:<?php echo $file['name']; ?>修改时间 :<?php echo $file['last_time'];?> 大小: <?php echo $file['size'];?>" >
-                        <div class="item-select">
-                            <div class="item-check"></div>
-                        </div>
-                        <div class="ico" >
-                            <i style="font-size: 56px!important;cursor: pointer" class="layui-icon layui-icon-file"></i>
-                        </div>
-                        <div class="filename">
-                            <span class="title db-click-rename" title="<?php echo $file['name']; ?>"><?php echo $file['name']; ?></span>
-                        </div>
-                    </div>
-                    <!-- 文件 -->
-
+                    <?php endif; ?>
                 <?php endif; ?>
             <?php endforeach; ?>
             <?php else: ?>

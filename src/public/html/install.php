@@ -55,6 +55,7 @@
                     </div>
                 </div>
 
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn sub_btn" type="button" >立即安装</button>
