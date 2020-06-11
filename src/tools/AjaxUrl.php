@@ -22,6 +22,7 @@ class AjaxUrl extends Common
             (new InstallDb())->installAll();
             (new InstallDb())->createInstallFile();
             toolsConfig('install','1');
+            toolsConfig('is_open_admin_tools','1');
             echo json_encode(['msg'=>'Install Success！','code'=>'200']);die;
         }catch (\Exception $e){
             echo  json_encode(['msg'=>'Install Error！','code'=>'100']);die;
@@ -83,12 +84,121 @@ class AjaxUrl extends Common
         }
     }
 
+    public function base64()
+    {
+        $type =Param('get.type');
+        $str =Param('get.str');
+        if($type=='decode'){
+            echo json_encode(['val'=>base64_decode($str)]);die;
+        }elseif($type=='encode'){
+            echo json_encode(['val'=>base64_encode($str)]);die;
+        }
+    }
+
+    public function setting()
+    {
+        $info = Param('post.');
+        $is_open = Param('post.is_open_admin_tools');
+        $is_open = $is_open=='1'?'1':'0';
+        toolsConfig('is_open_admin_tools',$is_open);
+        if($info){
+            foreach ($info as $k=> $vo)
+            {
+                if($k!='is_open_admin_tools'){
+                    toolsConfig($k,$vo);
+                }
+                if($k=='admin_tools_login'){
+                    toolsConfig($k,md5($vo));
+                }
+            }
+        }
+        echo json_encode(['msg'=>'修改成功！']);
+
+    }
+
+    public function block()
+    {
+        if($data=Param('post.'))
+        {
+            $id = $data['id'];
+            initToolsDb();
+
+            if($id!=''){
+                $res =\DB::update('tools_blocks',['status'=>$data['status'],'name'=>$data['name'],'block_name'=>trim($data['block_name']),'desc'=>$data['desc'],'content'=>$data['content'],'create_time'=>time()],"id=%s",$id);
+            }else{
+                $res=\DB::insert('tools_blocks',
+                    [
+                        'status'=>$data['status'],
+                        'name'=>$data['name'],
+                        'block_name'=>trim($data['block_name']),
+                        'desc'=>$data['desc'],
+                        'content'=>$data['content'],
+                        'create_time'=>time(),
+                        'update_time'=>time(),
+                    ]);
+            }
+            if($res){
+                echo json_encode(['msg'=>'操作成功！']);die;
+            }else{
+                echo json_encode(['msg'=>'操作失败！']);die;
+            }
+        }
+
+
+        $type =Param('get.type');
+        if($type=='edit_status')
+        {
+            $id = $type =Param('get.id');
+            $status = $type =Param('get.status');
+            initToolsDb();
+            $res = \DB::update('tools_blocks',['status'=>$status,'create_time'=>time()],"id=%s",$id);
+            if($res)
+            {
+                echo json_encode(['msg'=>'修改成功！']);die;
+            }else{
+                echo json_encode(['msg'=>'修改失败！']);die;
+            }
+        }elseif($type=='del')
+        {
+            initToolsDb();
+            $id = $type =Param('get.id');
+            $res = \DB::delete('tools_blocks',"id=%s",$id);
+            if($res)
+            {
+                echo json_encode(['msg'=>'删除成功！']);die;
+            }else{
+                echo json_encode(['msg'=>'删除失败！']);die;
+            }
+        }elseif($type=='check')
+        {
+            initToolsDb();
+            $block_name =Param('get.block_name');
+            $id =Param('get.id');
+            if($id){
+                $is_exist = \DB::queryFirstRow("select * from tools_blocks where block_name =%s and id <> %i",$block_name,$id);
+            }else{
+                $is_exist = \DB::queryFirstRow("select * from tools_blocks where block_name =%s",$block_name);
+            }
+
+            if($is_exist)
+            {
+                echo json_encode(['code'=>'0','msg'=>'此Block Name已存在！']);die;
+            }else{
+                echo json_encode(['code'=>'1']);die;
+            }
+        }
+
+
+    }
+
+
     /**
      * upload
      */
     public function upload()
     {
-        $res =uploadFile();
+        $path =Param('get.path');
+        $res =uploadFile(base64_decode($path));
         echo json_encode($res);die;
     }
 }

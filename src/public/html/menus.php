@@ -1,4 +1,5 @@
 <?php
+if($is_show):
 $path =getPublicPath(false);
 $menus = isset($menus)&&$menus?$menus:(new \admintools\tools\tools\Html())->menus;
 ?>
@@ -23,12 +24,15 @@ $menus = isset($menus)&&$menus?$menus:(new \admintools\tools\tools\Html())->menu
             if(index!=0){
                 $(val).parent().remove();
             }
-        })
+        });
+
+
     });
     $(document).on('click','.tool_menu',function () {
         var url =$(this).attr('_link');
         layer.open({
             type:2,
+            id:url,
             shadeClose:false,
             title:$(this).attr('title'),
             area: ['60%', '80%'],
@@ -37,3 +41,4 @@ $menus = isset($menus)&&$menus?$menus:(new \admintools\tools\tools\Html())->menu
 
     });
 </script>
+<?php endif; ?>

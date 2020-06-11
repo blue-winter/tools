@@ -311,6 +311,36 @@ if(!function_exists('toolsConfig')){
     }
 }
 
+if(!function_exists('toolsEcho'))
+{
+
+    function toolsEcho($info,$default='')
+    {
+        error_reporting(E_ALL ^ E_NOTICE);
+        if(isset($info)&&$info){
+            echo $info;
+        }else{
+            echo $default;
+        }
+    }
+}
+
+if(!function_exists('make_url'))
+{
+    /**
+     * 组合url参数 ?id=2&city=3
+     * @param array $data
+     */
+    function make_url(array $data=[]){
+        $link = '?';
+        $suffix = '&';
+        foreach ($data as $key=>$val){
+            $link .= $key.'='.$val.$suffix;
+        }
+        return trim($link,$suffix);
+    }
+}
+
 if(!function_exists('get_client_ip'))
 {
     function get_client_ip() {

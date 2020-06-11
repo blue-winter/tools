@@ -1,1 +1,13 @@
-
+.tools_page {
+    margin: 10px 0px;
+    text-align: center;
+}
+.tools_page a,.tools_page span{
+    border: 1px solid #e0dede;
+    padding: 1px 10px;
+    border-radius: 3px;
+    margin: 0 5px;
+    display: inline-block;
+    min-width: 15px;
+    text-align: center;
+}

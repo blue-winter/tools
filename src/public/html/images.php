@@ -285,6 +285,8 @@
 
             </div>
             <div class="layui-inline layui-layout-right" style="margin-right: 5%" >
+                <button class="layui-btn layui-btn-sm desc_btn_cont file_path_btn"><i class="layui-icon layui-icon-templeate-1"></i>路 径</button>
+
                 <button class="layui-btn layui-btn-sm layui-btn-warm desc_btn_cont  delete_desc_btn"><i class="layui-icon layui-icon-delete"></i>删 除</button>
                 <button class="layui-btn layui-btn-sm layui-btn-primary  desc_btn_cont  rename_desc_btn"><i class="layui-icon layui-icon-edit"></i>重命名</button>
                 <!--<button class="layui-btn layui-btn-sm layui-btn-primary "><i class="layui-icon layui-icon-templeate-1"></i>复 制</button>-->
@@ -299,7 +301,8 @@
     <script>
         layui.use('upload', function(){
             var upload = layui.upload;
-            var link = "/?ajax_url=upload";
+            var now = $("#now_path").val();
+            var link = "/?ajax_url=upload&path="+now;
             //执行实例
             var uploadInst = upload.render({
                  elem: '#upload_data' //绑定元素

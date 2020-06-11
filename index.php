@@ -1,10 +1,8 @@
-
 <?php
 require_once './vendor/autoload.php';
 initTools();
 
-
-$res= getPublicPath(true);
+echo 11111111111;
 //dump($res);
 
 

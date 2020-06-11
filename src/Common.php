@@ -5,6 +5,7 @@ use admintools\tools\tools\AjaxUrl;
 class Common
 {
     public $menus;
+    protected $is_allow;
 
     public function __construct($ajax=false)
     {
@@ -16,25 +17,71 @@ class Common
             ],
             2=>[
                 'link'=>'images',
-                'title'=>'文件管理',
+                'title'=>'Media',
                 'class'=>'menu-second',
             ],
             3=>[
-                'link'=>'#',
+                'link'=>'block',
                 'title'=>'Block',
                 'class'=>'menu-third',
             ],
             4=>[
                 'link'=>'#',
-                'title'=>'更多',
+                'title'=>'其他',
                 'class'=>'menu-fourth',
             ],
         ];
         $this->menus=$menus;
         $this->installStatus();
+        $this->logout();
+        $this->login();
+        $this->init();
         if(!$ajax){
             $this->ajaxData();
         }
+    }
+
+    private function init()
+    {
+        $is_allow= $this->checkAuth();
+        $this->is_allow=$is_allow;
+    }
+
+    protected function login()
+    {
+        if($this->installStatus()){
+            $pwd= trim(Param('get.login'));
+            if($pwd){
+                CookieTools('admin_tools_login',md5($pwd),43200);
+            }
+        }
+    }
+
+    protected function logout()
+    {
+        if($this->installStatus()){
+            if(Param('get.logout')){
+            CookieTools('admin_tools_login',null);
+        }
+        }
+
+    }
+
+    protected function checkAuth()
+    {
+        if($this->installStatus()){
+            $old=CookieTools('admin_tools_login');
+            $true_key= toolsConfig('admin_tools_login');
+            if($true_key){
+                if($old&&$old==$true_key){
+                    CookieTools('admin_tools_login',$old,43200);
+                    return  true;
+                }else{
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
